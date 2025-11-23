@@ -61,6 +61,7 @@
 | 27 | CI/CD設定（GitHub Actions） | テスト自動実行 | [x] |
 | 28 | エラーハンドリング共通化 | カスタム例外クラス | [ ] |
 | 29 | API仕様書（OpenAPI） | FastAPI自動生成 | [ ] |
+| 30 | SECRET_KEY等を環境変数化 | JWT設定を.envから読み込み | [ ] |
 
 ---
 
