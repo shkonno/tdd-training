@@ -2,6 +2,7 @@
 .claude/
 .kiro/
 history/
+note.md
 
 # Python
 __pycache__/
