@@ -16,13 +16,17 @@ jobs:
         working-directory: backend
 
     steps:
+      - uses: actions/checkout@v4
+
       - name: Debug info
+        working-directory: .
         run: |
           echo "Event: ${{ github.event_name }}"
           echo "Branch: ${{ github.ref }}"
           echo "Repository: ${{ github.repository }}"
-
-      - uses: actions/checkout@v4
+          pwd
+          ls -la
+          ls -la backend/ || echo "Backend directory not found"
 
       - name: Set up Python
         uses: actions/setup-python@v5
