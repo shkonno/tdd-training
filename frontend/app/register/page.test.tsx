@@ -16,5 +16,12 @@ describe('RegisterPage', () => {
     // ページタイトルが表示されることを確認
     expect(screen.getByText(/ユーザー登録/i)).toBeInTheDocument()
   })
+
+  it('メールアドレス入力フィールドが表示される', () => {
+    render(<RegisterPage />)
+    
+    // メールアドレス入力フィールドが存在することを確認
+    expect(screen.getByLabelText(/メールアドレス/i)).toBeInTheDocument()
+  })
 })
 
