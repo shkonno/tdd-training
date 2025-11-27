@@ -9,6 +9,7 @@ from app.domain.login_service import LoginService
 from app.domain.jwt import verify_token, create_access_token, create_refresh_token
 from app.domain.oauth_service import GoogleOAuthService
 from app.domain import oauth_config
+from app.domain.exceptions import BusinessError
 from app.infrastructure.user_repository import SqlAlchemyUserRepository
 from app.infrastructure.database import SessionLocal
 
@@ -98,7 +99,7 @@ def register_user(request: UserRegistrationRequest):
         finally:
             db.close()
 
-    except ValueError as e:
+    except BusinessError as e:
         # 重複メールアドレスエラー
         raise HTTPException(status_code=409, detail={"error": str(e)})
     except Exception as e:
