@@ -1,11 +1,14 @@
-from fastapi import FastAPI, HTTPException, Depends, Header
+from fastapi import FastAPI, HTTPException, Depends, Header, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 from uuid import UUID
+import httpx
 from app.domain.registration_service import RegistrationService
 from app.domain.login_service import LoginService
-from app.domain.jwt import verify_token
+from app.domain.jwt import verify_token, create_access_token, create_refresh_token
+from app.domain.oauth_service import GoogleOAuthService
+from app.domain import oauth_config
 from app.infrastructure.user_repository import SqlAlchemyUserRepository
 from app.infrastructure.database import SessionLocal
 
@@ -47,6 +50,19 @@ class UserLoginResponse(BaseModel):
 class CurrentUserResponse(BaseModel):
     id: str
     email: str
+
+
+class OAuthCallbackResponse(BaseModel):
+    access_token: str
+    refresh_token: str
+
+
+class RefreshTokenRequest(BaseModel):
+    refresh_token: str
+
+
+class RefreshTokenResponse(BaseModel):
+    access_token: str
 
 
 @app.get("/")
@@ -163,3 +179,79 @@ def get_current_user(user_id: str = Depends(get_current_user_id)):
         raise
     except Exception as e:
         raise HTTPException(status_code=400, detail={"error": str(e)})
+
+
+@app.get("/auth/google/callback", response_model=OAuthCallbackResponse)
+def google_oauth_callback(code: Optional[str] = Query(None)):
+    """Google OAuth認証コールバックエンドポイント
+    
+    認証コードを受け取り、Google APIでトークン交換とユーザー情報取得を行い、
+    JWTトークンを返す。
+    """
+    # 認証コードのチェック
+    if not code:
+        raise HTTPException(status_code=400, detail={"error": "Authorization code is required"})
+    
+    try:
+        # データベースセッション作成
+        db = SessionLocal()
+        try:
+            repository = SqlAlchemyUserRepository(db)
+            oauth_service = GoogleOAuthService(repository)
+            
+            # Google OAuth設定の確認
+            if not oauth_config.is_google_oauth_configured():
+                raise HTTPException(status_code=500, detail={"error": "Google OAuth is not configured"})
+            
+            # ステップ1: 認証コードをアクセストークンに交換
+            token_response = httpx.post(
+                oauth_config.GOOGLE_TOKEN_URL,
+                data={
+                    "code": code,
+                    "client_id": oauth_config.GOOGLE_CLIENT_ID,
+                    "client_secret": oauth_config.GOOGLE_CLIENT_SECRET,
+                    "redirect_uri": oauth_config.GOOGLE_REDIRECT_URI,
+                    "grant_type": "authorization_code"
+                }
+            )
+            
+            if token_response.status_code != 200:
+                error_data = token_response.json() if token_response.headers.get("content-type", "").startswith("application/json") else {}
+                raise HTTPException(status_code=401, detail={"error": error_data.get("error", "Failed to exchange authorization code")})
+            
+            token_data = token_response.json()
+            google_access_token = token_data.get("access_token")
+            
+            if not google_access_token:
+                raise HTTPException(status_code=401, detail={"error": "Failed to get access token from Google"})
+            
+            # ステップ2: Google APIでユーザー情報を取得
+            userinfo_response = httpx.get(
+                oauth_config.GOOGLE_USERINFO_URL,
+                headers={"Authorization": f"Bearer {google_access_token}"}
+            )
+            
+            if userinfo_response.status_code != 200:
+                raise HTTPException(status_code=500, detail={"error": "Failed to get user info from Google"})
+            
+            google_user_info = userinfo_response.json()
+            
+            # ステップ3: GoogleOAuthServiceでユーザーを作成または取得
+            user = oauth_service.authenticate(google_user_info)
+            
+            # ステップ4: JWTトークンを生成
+            access_token = create_access_token({"sub": str(user.id)})
+            refresh_token = create_refresh_token({"sub": str(user.id)})
+            
+            return OAuthCallbackResponse(
+                access_token=access_token,
+                refresh_token=refresh_token
+            )
+        finally:
+            db.close()
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        # Google API呼び出し失敗などの予期しないエラー
+        raise HTTPException(status_code=500, detail={"error": str(e)})
