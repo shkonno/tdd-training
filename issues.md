@@ -46,7 +46,7 @@
 | #   | イシュー                  | TDD テスト対象             | 優先度 | 状態 |
 | --- | ------------------------- | -------------------------- | ------ | ---- |
 | 20  | リフレッシュトークン生成  | `test_refresh_token.py`    | High   | [x]  |
-| 21  | アクセストークン更新 API  | `test_refresh_endpoint.py` | High   | [ ]  |
+| 21  | アクセストークン更新 API  | `test_refresh_endpoint.py` | High   | [x]  |
 | 22  | Google OAuth 設定         | -                          | Medium | [ ]  |
 | 23  | GoogleOAuthService        | `test_oauth.py`            | High   | [ ]  |
 | 24  | OAuth コールバック API    | `test_oauth_callback.py`   | High   | [ ]  |
