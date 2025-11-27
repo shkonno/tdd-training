@@ -35,8 +35,8 @@
 | 14  | 認証エラーハンドリング        | `test_login.py`           | High   | [x]  |
 | 15  | Redis セッションストア        | `test_session.py`         | High   | [x]  |
 | 16  | ログイン API エンドポイント   | `test_login_endpoint.py`  | High   | [x]  |
-| 17  | ログインフォーム UI           | E2E テスト（任意）        | Medium | [ ]  |
-| 18  | 保護されたルート（/users/me） | `test_protected_route.py` | High   | [ ]  |
+| 17  | ログインフォーム UI           | E2E テスト（任意）        | Medium | [x]  |
+| 18  | 保護されたルート（/users/me） | `test_protected_route.py` | High   | [x]  |
 | 19  | ダッシュボード UI             | E2E テスト（任意）        | Medium | [ ]  |
 
 ---
