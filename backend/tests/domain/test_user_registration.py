@@ -2,11 +2,12 @@
 
 import pytest
 from hypothesis import given, strategies as st
-from pydantic import ValidationError
+from pydantic import ValidationError as PydanticValidationError
 
 from app.domain.user import User
 from app.domain.user_repository import UserRepository
 from app.domain.registration_service import RegistrationService
+from app.domain.exceptions import BusinessError
 
 
 def test_create_user_with_valid_attributes():
@@ -25,7 +26,7 @@ def test_create_user_with_valid_attributes():
 
 def test_create_user_with_invalid_email_raises_error():
     """無効なメールアドレスでUserを作成するとエラーになる"""
-    with pytest.raises(ValidationError):
+    with pytest.raises(PydanticValidationError):
         User(
             email="invalid-email",
             hashed_password="hashed_password_here"
@@ -34,7 +35,7 @@ def test_create_user_with_invalid_email_raises_error():
 
 def test_create_user_with_empty_password_raises_error():
     """空のパスワードでUserを作成するとエラーになる"""
-    with pytest.raises(ValidationError):
+    with pytest.raises(PydanticValidationError):
         User(
             email="test@example.com",
             hashed_password=""
@@ -43,7 +44,7 @@ def test_create_user_with_empty_password_raises_error():
 
 def test_create_user_with_empty_email_raises_error():
     """空のメールアドレスでUserを作成するとエラーになる"""
-    with pytest.raises(ValidationError):
+    with pytest.raises(PydanticValidationError):
         User(
             email="",
             hashed_password="hashed_password_here"
@@ -167,7 +168,7 @@ def test_register_with_duplicate_email_raises_error():
     service.register("test@example.com", "password123")
 
     # Act & Assert
-    with pytest.raises(ValueError):
+    with pytest.raises(BusinessError):
         service.register("test@example.com", "another_password")
 
 

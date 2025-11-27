@@ -20,10 +20,10 @@
 | 7 | Userドメインエンティティ | `test_user_registration.py` | High | [ｘ] |
 | 8 | UserRepositoryインターフェース | `test_user_registration.py` | High | [x] |
 | 9 | RegistrationService | `test_user_registration.py` | High | [x] |
-| 10 | SQLAlchemy UserRepository実装 | `test_user_repository.py` | High | [ ] |
-| 11 | 登録APIエンドポイント | `test_registration_endpoint.py` | High | [ ] |
-| 12 | 登録フォームUI（Next.js） | E2Eテスト（任意） | Medium | [ ] |
-| 12a | 品質保証観点でのテスト | 全テスト（任意） | Medium | [ ] |
+| 10 | SQLAlchemy UserRepository実装 | `test_user_repository.py` | High | [x] |
+| 11 | 登録APIエンドポイント | `test_registration_endpoint.py` | High | [x] |
+| 12 | 登録フォームUI（Next.js） | E2Eテスト（任意） | Medium | [x] |
+| 12a | 品質保証観点でのテスト | 全テスト（任意） | Medium | [x] |
 
 ---
 
@@ -60,10 +60,10 @@
 | --- | ---------------------------- | --------------------------- | ---- |
 | 26  | .gitignore 作成              | Python + Node.js 用         | [x]  |
 | 27  | CI/CD 設定（GitHub Actions） | テスト自動実行              | [x]  |
-| 28  | エラーハンドリング共通化     | カスタム例外クラス          | [ ]  |
-| 29  | API 仕様書（OpenAPI）        | FastAPI 自動生成            | [ ]  |
-| 30  | SECRET_KEY 等を環境変数化    | JWT 設定を.env から読み込み | [ ]  |
-| 31  | Logger                      |影響大きい | [ ]  |
+| 28  | エラーハンドリング共通化     | カスタム例外クラス          | [x]  |
+| 29  | API 仕様書（OpenAPI）        | FastAPI 自動生成            | [x]  |
+| 30  | SECRET_KEY 等を環境変数化    | JWT 設定を.env から読み込み | [x]  |
+| 31  | Logger                      |影響大きい | [x]  |
 
 ---
 
