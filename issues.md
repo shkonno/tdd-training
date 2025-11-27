@@ -23,7 +23,7 @@
 | 10  | SQLAlchemy UserRepository 実装  | `test_user_repository.py`       | High   | [x]  |
 | 11  | 登録 API エンドポイント         | `test_registration_endpoint.py` | High   | [x]  |
 | 12  | 登録フォーム UI（Next.js）      | E2E テスト（任意）              | Medium | [x]  |
-| 12a | 品質保証観点でのテスト          | 全テスト（任意）                | Medium | [ ]  |
+| 12a | 品質保証観点でのテスト          | 全テスト（任意）                | Medium | [x]  |
 
 ---
 
@@ -31,8 +31,8 @@
 
 | #   | イシュー                      | TDD テスト対象            | 優先度 | 状態 |
 | --- | ----------------------------- | ------------------------- | ------ | ---- |
-| 13  | LoginService 実装             | `test_login.py`           | High   | [ ]  |
-| 14  | 認証エラーハンドリング        | `test_login.py`           | High   | [ ]  |
+| 13  | LoginService 実装             | `test_login.py`           | High   | [x]  |
+| 14  | 認証エラーハンドリング        | `test_login.py`           | High   | [x]  |
 | 15  | Redis セッションストア        | `test_session.py`         | High   | [ ]  |
 | 16  | ログイン API エンドポイント   | `test_login_endpoint.py`  | High   | [ ]  |
 | 17  | ログインフォーム UI           | E2E テスト（任意）        | Medium | [ ]  |
@@ -63,9 +63,9 @@
 | 28  | エラーハンドリング共通化     | カスタム例外クラス          | [ ]  |
 | 29  | API 仕様書（OpenAPI）        | FastAPI 自動生成            | [ ]  |
 | 30  | SECRET_KEY 等を環境変数化    | JWT 設定を.env から読み込み | [ ]  |
+| 31  | Logger                      |影響大きい | [ ]  |
 
 ---
-
 ## TDD サイクルの進め方
 
 各イシューは以下のサイクルで進める：
